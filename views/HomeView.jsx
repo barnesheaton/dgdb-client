@@ -15,9 +15,10 @@ class HomeView extends React.Component {
     return (
       <View style={styles.container}>
         <TextButton title="Hello?" />
+        {this.props}
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.props.data &&
-            this.props.data.map((game, index) => {
+          {this.props.data.data &&
+            this.props.data.data.map((game, index) => {
               return <Card key={index} title={game.name} />
             })}
         </ScrollView>

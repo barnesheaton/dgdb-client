@@ -80,7 +80,7 @@ export default class App extends React.Component {
           if (networkError) console.log(`[Network error]: ${networkError}`)
         }),
         new HttpLink({
-          uri: 'https://w5xlvm3vzz.lp.gql.zone/graphql'
+          uri: 'https://abh-dgdb.herokuapp.com/graphql'
         })
       ]),
       cache: new InMemoryCache()
