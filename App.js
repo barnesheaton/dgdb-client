@@ -5,7 +5,11 @@ import {
   createDrawerNavigator
 } from 'react-navigation'
 
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import ApolloClient from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { HttpLink } from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
+import { ApolloLink } from 'apollo-link'
 import { ApolloProvider } from 'react-apollo'
 
 import CustomDrawer from './components/CustomDrawer'
@@ -64,11 +68,22 @@ const AppContainer = createAppContainer(rootNavigator)
 
 export default class App extends React.Component {
   render() {
-    const networkInterface = createNetworkInterface({
-      uri: 'http://localhost:8080/graphql'
-    })
     const client = new ApolloClient({
-      networkInterface
+      link: ApolloLink.from([
+        onError(({ graphQLErrors, networkError }) => {
+          if (graphQLErrors)
+            graphQLErrors.forEach(({ message, locations, path }) =>
+              console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+              )
+            )
+          if (networkError) console.log(`[Network error]: ${networkError}`)
+        }),
+        new HttpLink({
+          uri: 'https://w5xlvm3vzz.lp.gql.zone/graphql'
+        })
+      ]),
+      cache: new InMemoryCache()
     })
 
     return (

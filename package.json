@@ -4,10 +4,15 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "build": "npx react-native run-ios --simulator=\"iPhone 8\"",
     "test": "jest"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.8",
+    "apollo-link": "^1.2.14",
+    "apollo-link-error": "^1.1.13",
+    "apollo-link-http": "^1.5.17",
     "autobind-decorator": "^2.4.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",

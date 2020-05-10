@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
@@ -9,15 +9,17 @@ import { TextButton } from '../components/Button'
 class HomeView extends React.Component {
   render() {
     if (this.props.data.loading) {
-      return <div>Loading</div>
+      return <Text>Loading</Text>
     }
+    console.log('props', this.props)
     return (
       <View style={styles.container}>
         <TextButton title="Hello?" />
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.props.data.map((game, index) => {
-            return <Card key={index} title={game.name} />
-          })}
+          {this.props.data &&
+            this.props.data.map((game, index) => {
+              return <Card key={index} title={game.name} />
+            })}
         </ScrollView>
       </View>
     )
