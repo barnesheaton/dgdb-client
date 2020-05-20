@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 import Card from '../components/Card'
-import { TextButton } from '../components/Button'
 
 class HomeView extends React.Component {
   render() {
@@ -14,22 +13,34 @@ class HomeView extends React.Component {
     console.log('props', this.props)
     return (
       <View style={styles.container}>
-        <TextButton title="Hello?" />
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.props.data.games &&
-            this.props.data.games.map((game, index) => {
-              return <Card key={index} title={game.name} />
+          {this.props.data.getGames &&
+            this.props.data.getGames.map((game, index) => {
+              return (
+                <Card
+                  key={index}
+                  title={game.name}
+                  onPress={this.goToGame(game)}
+                />
+              )
             })}
         </ScrollView>
       </View>
     )
   }
+
+  goToGame(game) {
+    this.props.navigation.navigate('Game')
+  }
 }
 
 const GAMES_QUERY = gql`
   query GamesQuery {
-    games {
+    getGames {
+      _id
+      description
       name
+      min_players
     }
   }
 `

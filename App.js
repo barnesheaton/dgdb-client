@@ -22,7 +22,7 @@ const stackNavigator = createStackNavigator(
     Home: {
       screen: HomeView
     },
-    Song: {
+    Game: {
       screen: GameView
     }
   },
@@ -80,7 +80,8 @@ export default class App extends React.Component {
           if (networkError) console.log(`[Network error]: ${networkError}`)
         }),
         new HttpLink({
-          uri: 'https://abh-dgdb.herokuapp.com/graphql'
+          uri: 'https://localhost:8080/graphql'
+          // uri: 'https://abh-dgdb.herokuapp.com/graphql'
         })
       ]),
       cache: new InMemoryCache()
