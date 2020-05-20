@@ -17,6 +17,8 @@ import HomeView from './views/HomeView'
 import GameView from './views/GameView'
 import WebViewModal from './views/WebViewModal'
 
+import { API_URI } from 'react-native-dotenv'
+
 const stackNavigator = createStackNavigator(
   {
     Home: {
@@ -68,6 +70,8 @@ const AppContainer = createAppContainer(rootNavigator)
 
 export default class App extends React.Component {
   render() {
+    console.log('ENV', API_URI)
+
     const client = new ApolloClient({
       link: ApolloLink.from([
         onError(({ graphQLErrors, networkError }) => {
@@ -80,7 +84,8 @@ export default class App extends React.Component {
           if (networkError) console.log(`[Network error]: ${networkError}`)
         }),
         new HttpLink({
-          uri: 'https://localhost:8080/graphql'
+          uri: API_URI
+          // uri: 'https://localhost:8080/graphql'
           // uri: 'https://abh-dgdb.herokuapp.com/graphql'
         })
       ]),
