@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 
-import { withNavigation } from 'react-navigation'
+// import { withNavigation } from 'react-navigation'
 
 import { colors } from '../utils/colors'
 import { Title3, Subhead } from './Text'
@@ -43,7 +43,7 @@ class Card extends React.Component {
   }
 }
 
-export default withNavigation(Card)
+export default Card
 
 const styles = StyleSheet.create({
   container: {
