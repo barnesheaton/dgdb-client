@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 
 import { withNavigation } from 'react-navigation'
 
@@ -10,10 +10,10 @@ import Label from './Label'
 
 class Card extends React.Component {
   render() {
-    const { title, date, label, ...props } = this.props
+    const { title, date, label, description, ...props } = this.props
 
     return (
-      <TouchableOpacity {...props} disabled>
+      <TouchableOpacity {...props}>
         <View style={styles.container}>
           {title && <Title3 b>{title}</Title3>}
           <View
@@ -35,6 +35,7 @@ class Card extends React.Component {
             {date && <Subhead>Posted: {date}</Subhead>}
           </View>
           <HorizontalLine />
+          <Text>{props.description}</Text>
           <View style={{ alignItems: 'center' }}>{props.children}</View>
         </View>
       </TouchableOpacity>

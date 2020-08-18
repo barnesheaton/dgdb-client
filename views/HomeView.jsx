@@ -4,13 +4,13 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 import Card from '../components/Card'
+import LoadingView from './LoadingView'
 
 class HomeView extends React.Component {
   render() {
     if (this.props.data.loading) {
-      return <Text>Loading</Text>
+      return <LoadingView />
     }
-    console.log('props', this.props)
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -20,7 +20,10 @@ class HomeView extends React.Component {
                 <Card
                   key={index}
                   title={game.name}
-                  onPress={this.goToGame(game)}
+                  description={game.description}
+                  onPress={() => {
+                    this.goToGame(game)
+                  }}
                 />
               )
             })}
@@ -30,12 +33,12 @@ class HomeView extends React.Component {
   }
 
   goToGame(game) {
-    this.props.navigation.navigate('Game')
+    this.props.navigation.navigate('GameModal', { id: game._id })
   }
 }
 
 const GAMES_QUERY = gql`
-  query GamesQuery {
+  {
     getGames {
       _id
       description

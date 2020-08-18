@@ -1,23 +1,48 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
-import withQuery from '../components/withQuery'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
+
+import LoadingView from './LoadingView'
 
 class GameView extends React.Component {
   render() {
-    const { isLoading, error, data } = this.props
-    if (isLoading || error) return <View style={styles.container} />
+    console.log('ON GAME VIEW', this.props)
 
-    return <View style={styles.container}></View>
+    if (this.props.data.loading) {
+      return <LoadingView />
+    }
+
+    return (
+      <View style={styles.container}>
+        <Text>Game!</Text>
+      </View>
+    )
   }
 }
 
-export default withQuery(GameView)
+const GAME_QUERY = gql`
+  query optionalName($id: ID!) {
+    getGame(id: $id) {
+      _id
+      description
+      name
+      min_players
+    }
+  }
+`
+
+export default graphql(GAME_QUERY, {
+  options: props => ({ variables: { id: props.navigation.state.params.id } })
+})(GameView)
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'green',
     padding: 10
   }
 })

@@ -1,8 +1,10 @@
+import 'react-native-gesture-handler'
 import React from 'react'
 import {
   createStackNavigator,
   createAppContainer,
-  createDrawerNavigator
+  createDrawerNavigator,
+  createBottomTabNavigator
 } from 'react-navigation'
 
 import ApolloClient from 'apollo-client'
@@ -15,44 +17,42 @@ import { ApolloProvider } from 'react-apollo'
 import CustomDrawer from './components/CustomDrawer'
 import HomeView from './views/HomeView'
 import GameView from './views/GameView'
-import WebViewModal from './views/WebViewModal'
+import SearchView from './views/SearchView'
 
 import { API_URI } from 'react-native-dotenv'
 
-const stackNavigator = createStackNavigator(
+import RootNavigator from './navigation'
+
+const tabNavigator = createBottomTabNavigator({
+  Trending: {
+    screen: HomeView
+  },
+  Search: {
+    screen: SearchView
+  }
+})
+
+const modalNavigator = createStackNavigator(
   {
-    Home: {
-      screen: HomeView
-    },
-    Game: {
+    Tabs: { screen: tabNavigator },
+    GameModal: {
       screen: GameView
     }
   },
   {
-    mode: 'card'
-  }
-)
-
-const modalNavigator = createStackNavigator(
-  {
-    Stack: stackNavigator,
-    WebViewModal: {
-      screen: WebViewModal
-    }
-  },
-  {
-    initialRouteName: 'Stack',
+    initialRouteName: 'Tabs',
     mode: 'modal',
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: '#f4511e'
-      },
-      headerTitle: 'DGDB!',
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold'
-      }
-    }
+    headerMode: 'none'
+    // defaultNavigationOptions: {
+    //   headerStyle: {
+    //     backgroundColor: '#f4511e'
+    //   },
+    //   headerTitle: 'DGDB!',
+    //   headerTintColor: '#fff',
+    //   headerTitleStyle: {
+    //     fontWeight: 'bold'
+    //   }
+    // }
   }
 )
 
@@ -66,12 +66,10 @@ const rootNavigator = createDrawerNavigator(
   }
 )
 
-const AppContainer = createAppContainer(rootNavigator)
+const AppContainer = createAppContainer(modalNavigator)
 
 export default class App extends React.Component {
   render() {
-    console.log('ENV', API_URI)
-
     const client = new ApolloClient({
       link: ApolloLink.from([
         onError(({ graphQLErrors, networkError }) => {
@@ -85,8 +83,6 @@ export default class App extends React.Component {
         }),
         new HttpLink({
           uri: API_URI
-          // uri: 'https://localhost:8080/graphql'
-          // uri: 'https://abh-dgdb.herokuapp.com/graphql'
         })
       ]),
       cache: new InMemoryCache()
@@ -94,7 +90,7 @@ export default class App extends React.Component {
 
     return (
       <ApolloProvider client={client}>
-        <AppContainer />
+        <RootNavigator />
       </ApolloProvider>
     )
   }
